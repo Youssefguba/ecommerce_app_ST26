@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_sat26/repositories/auth_repo.dart';
 import 'package:ecommerce_app_sat26/screens/home_screen.dart';
 import 'package:ecommerce_app_sat26/screens/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -133,8 +135,13 @@ class _LoginScreenState extends State<LoginScreen> {
           print('Email :: ${emailController.text}');
 
           if (formKey.currentState!.validate()) {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => HomeScreen()));
+            AuthRepo().login(
+              emailController.text,
+              passwordController.text,
+            );
+
+            // Navigator.of(context)
+            //     .push(MaterialPageRoute(builder: (context) => HomeScreen()));
           }
         },
         child: Text('Sign In'),
@@ -222,6 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
         vertical: 16,
       ),
       child: TextFormField(
+        controller: passwordController,
         obscureText: isPasswordObscure,
         decoration: InputDecoration(
           hintText: 'enter your password',

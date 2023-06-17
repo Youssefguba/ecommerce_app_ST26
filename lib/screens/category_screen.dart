@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:ecommerce_app_sat26/repositories/category_repo.dart';
+import 'package:ecommerce_app_sat26/screens/single_product_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -39,7 +40,8 @@ class CategoryScreen extends StatelessWidget {
               }
 
               if (snapshot.data != null) {
-                final listOfProducts = snapshot.data!.data['data']['data']; // FutureBuilder Snapshot data
+                final listOfProducts = snapshot.data!.data['data']
+                    ['data']; // FutureBuilder Snapshot data
                 print('list of products : $listOfProducts');
 
                 // TODO: Change color of ClampingScrollPhysics
@@ -57,69 +59,80 @@ class CategoryScreen extends StatelessWidget {
                     final categoryItem =
                         CategoryProduct.fromJson(listOfProducts[index]);
 
-                    return Container(
-                      height: 170,
-                      width: 120,
-                      margin: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Image
-                          Image.network(
-                            // listOfProducts[index]['image'],
-                            categoryItem.image,
-                            height: 90,
-                            width: 90,
-                          ),
-
-                          // Text
-                          Text(
-                            categoryItem.name,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                          ),
-
-                          // Rating
-                          RatingBar.builder(
-                            itemSize: 20,
-                            initialRating: 3,
-                            minRating: 1,
-                            ignoreGestures: true,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                            itemBuilder: (context, _) => Icon(
-                              Icons.star,
-                              color: Colors.amber,
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => SingleProductScreen(
+                                categoryItem: categoryItem
                             ),
-                            onRatingUpdate: (rating) {
-                              print(rating);
-                            },
                           ),
-
-                          // Text
-                          Text(categoryItem.price.toString()),
-
-                          // Row [ Text, Text, Icon ]
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(categoryItem.oldPrice.toString()),
-                              Text(categoryItem.discount.toString()),
-                              Icon(Icons.delete_outline),
-                            ],
+                        );
+                      },
+                      child: Container(
+                        height: 170,
+                        width: 120,
+                        margin: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
                           ),
-                        ],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // Image
+                            Image.network(
+                              categoryItem.image,
+                              height: 90,
+                              width: 90,
+                            ),
+
+                            // Text
+                            Text(
+                              categoryItem.name,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                            ),
+
+                            // Rating
+                            RatingBar.builder(
+                              itemSize: 20,
+                              initialRating: 3,
+                              minRating: 1,
+                              ignoreGestures: true,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemPadding:
+                                  EdgeInsets.symmetric(horizontal: 4.0),
+                              itemBuilder: (context, _) => Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (rating) {
+                                print(rating);
+                              },
+                            ),
+
+                            // Text
+                            Text(categoryItem.price.toString()),
+
+                            // Row [ Text, Text, Icon ]
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(categoryItem.oldPrice.toString()),
+                                Text(categoryItem.discount.toString()),
+                                Icon(Icons.delete_outline),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
